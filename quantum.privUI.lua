@@ -1,7 +1,5 @@
 
--- Quantum UI with Ardour Features Integrated
-
--- QuantumUI Script (Base GUI)
+--quantum UI library
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/sigma232132131/quantum.priv/refs/heads/main/test8.lua"))()
 
 
@@ -41,10 +39,37 @@ local Tab1 = Init:NewTab("visuals")
 
 local Section1 = Tab1:NewSection("quantum.priv")
 
+local Toggle2 = Tab1:NewToggle("Hide Watermark", false, function(value)
+    local vers = value and "on" or "off" -- This line determines the state as 'on' or 'off'
+    if value then
+        Wm:Hide() -- If the toggle is on, hide the watermark
+    else
+        Wm:Show() -- If the toggle is off, show the watermark
+    end
+end)
+
 --misc tab
 local Tab1 = Init:NewTab("misc")
 
 local Section1 = Tab1:NewSection("quantum.priv")
+
+
+local Toggle1 = Tab1:NewToggle("Auto Reload", false, function(value)
+    local vers = value and "on" or "off"
+    _G.AutoReload = true -- change to false if u don't want it anymore.
+
+while _G.AutoReload == false and game:GetService("RunService").Heartbeat:Wait() do
+if game:GetService("Players").LocalPlayer.Character:FindFirstChildWhichIsA("Tool") then
+            if game:GetService("Players").LocalPlayer.Character:FindFirstChildWhichIsA("Tool"):FindFirstChild("Ammo") then
+                if game:GetService("Players").LocalPlayer.Character:FindFirstChildWhichIsA("Tool"):FindFirstChild("Ammo").Value <= 0 then
+                    game:GetService("ReplicatedStorage").MainEvent:FireServer("Reload", game:GetService("Players").LocalPlayer.Character:FindFirstChildWhichIsA("Tool")) 
+                    wait(1)
+                end
+            end
+        end
+end
+end)
+
 
 local Toggle2 = Tab1:NewToggle("Toggle", false, function(value)
     local vers = value and "on" or "off"
@@ -85,15 +110,9 @@ local Tab1 = Init:NewTab("settings")
 
 local Section1 = Tab1:NewSection("quantum.priv")
 
-local Toggle1 = Tab1:NewToggle("Example toggle", false, function(value)
-    local vers = value and "on" or "off"
-    print("one " .. vers)
-end):AddKeybind(Enum.KeyCode.RightControl)
-
-local Toggle2 = Tab1:NewToggle("Toggle", false, function(value)
-    local vers = value and "on" or "off"
-    print("two " .. vers)
-end):AddKeybind(Enum.KeyCode.LeftControl)
+local Keybind1 = Tab1:NewKeybind("GUI Keybind", Enum.KeyCode.Insert, function(key)
+    Init:UpdateKeybind(Enum.KeyCode[key])
+end)
 
 
 
@@ -423,55 +442,3 @@ local FinishedLoading = Notif:Notify("LOADED quantum.priv", 4, "success")
 ]]
 
 -- Adding Ardour functionalities into QuantumUI buttons and toggles:
-
--- Silent Aim
-local silentAimEnabled = false
-function toggleSilentAim(state)
-    silentAimEnabled = state
-    if silentAimEnabled then
-        -- Functionality for Silent Aim from Ardour script
-        -- Example implementation of silent aim
-        game:GetService("RunService").RenderStepped:Connect(function()
-            if silentAimEnabled then
-                -- Replace with proper silent aim function from Ardour script
-                -- Example: silent aim logic here
-            end
-        end)
-    end
-end
-
--- ESP
-local espEnabled = false
-function toggleESP(state)
-    espEnabled = state
-    if espEnabled then
-        -- Functionality for ESP from Ardour script
-        -- Example implementation of ESP
-        for _, v in ipairs(workspace:GetChildren()) do
-            -- Setup ESP for each relevant object (example from Ardour)
-            setupesp(v, "Highlight", "Extract")
-        end
-    end
-end
-
--- Loot ESP
-local lootESPEnabled = false
-function toggleLootESP(state)
-    lootESPEnabled = state
-    if lootESPEnabled then
-        -- Functionality for Loot ESP from Ardour script
-        for _, v in ipairs(workspace:GetChildren()) do
-            setupesp(v, "Loot", "Extract")
-        end
-    end
-end
-
--- Other features from Ardour can be integrated similarly, bound to their respective toggles or buttons.
--- You can add more features here based on the Ardour script, like highlight ESP, distance ESP, etc.
-
--- Connect these features to the UI buttons/toggles in QuantumUI
--- For instance:
--- QuantumUI.AddButton("Enable Silent Aim", function() toggleSilentAim(true) end)
--- QuantumUI.AddButton("Enable ESP", function() toggleESP(true) end)
--- QuantumUI.AddButton("Enable Loot ESP", function() toggleLootESP(true) end)
-
